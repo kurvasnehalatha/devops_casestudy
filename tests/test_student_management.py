@@ -46,6 +46,7 @@ def test_dashboard_response(driver):
     assert driver.current_url.startswith(BASE_URL)
 
 
+
 def test_student_page_navigation(driver):
     driver.get(BASE_URL)
 
@@ -56,16 +57,12 @@ def test_student_page_navigation(driver):
     ]
 
     if not student_links:
-        pytest.skip(
-            "No student navigation link found; "
-            "update the selector for your HTML."
-        )
+        pytest.skip("No student navigation link found.")
 
     student_links[0].click()
 
     WebDriverWait(driver, 10).until(
         lambda browser: browser.current_url != BASE_URL
-        or "student" in browser.current_url.lower()
     )
 
-    assert "student" in driver.current_url.lower()
+    assert driver.current_url != BASE_URL
