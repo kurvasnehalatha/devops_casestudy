@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-sm border-0">
+        <div class="card-header bg-white border-0 py-3">
+          <h2 class="mb-0">{{ page_title }}</h2>
+        </div>
+        <div class="card-body">
+          <form method="post" novalidate>
+            {{ form.hidden_tag() }}
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                {{ form.student_id.label(class='form-label') }}
+                {{ form.student_id(class='form-control', placeholder='e.g. STU-1001') }}
+                {% for error in form.student_id.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.full_name.label(class='form-label') }}
+                {{ form.full_name(class='form-control', placeholder='John Doe') }}
+                {% for error in form.full_name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.email.label(class='form-label') }}
+                {{ form.email(class='form-control', placeholder='student@example.com') }}
+                {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.phone.label(class='form-label') }}
+                {{ form.phone(class='form-control', placeholder='+1 234 567 890') }}
+                {% for error in form.phone.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.department_id.label(class='form-label') }}
+                {{ form.department_id(class='form-select') }}
+                {% for error in form.department_id.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.course_id.label(class='form-label') }}
+                {{ form.course_id(class='form-select') }}
+                {% for error in form.course_id.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+
+              <div class="col-md-6">
+                {{ form.enrollment_date.label(class='form-label') }}
+                {{ form.enrollment_date(class='form-control') }}
+                {% for error in form.enrollment_date.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+              <a href="{{ url_for('main.students') }}" class="btn btn-outline-secondary">Cancel</a>
+              {{ form.submit(class='btn btn-primary') }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

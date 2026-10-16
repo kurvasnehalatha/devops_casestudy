@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div>
+      <p class="text-uppercase text-muted fw-semibold mb-1">Records</p>
+      <h1 class="mb-0">Student Directory</h1>
+    </div>
+    <a href="{{ url_for('main.add_student') }}" class="btn btn-primary">Add Student</a>
+  </div>
+
+  <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+      <form method="get" class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="search" class="form-label">Search by ID, name or email</label>
+          <input type="text" name="q" id="search" class="form-control" value="{{ search_query }}" placeholder="Search students...">
+        </div>
+        <div class="col-md-3">
+          <label for="department" class="form-label">Department</label>
+          <select name="department" id="department" class="form-select">
+            <option value="">All Departments</option>
+            {% for department in departments %}
+              <option value="{{ department.id }}" {% if selected_department == department.id %}selected{% endif %}>{{ department.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="course" class="form-label">Course</label>
+          <select name="course" id="course" class="form-select">
+            <option value="">All Courses</option>
+            {% for course in courses %}
+              <option value="{{ course.id }}" {% if selected_course == course.id %}selected{% endif %}>{{ course.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button type="submit" class="btn btn-primary w-100">Filter</button>
+          <a href="{{ url_for('main.students') }}" class="btn btn-outline-secondary w-100">Reset</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Students</h5>
+      <span class="badge bg-primary rounded-pill">{{ students|length }} record(s)</span>
+    </div>
+    <div class="card-body p-0">
+      {% if students %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Course</th>
+                <th>Enrollment</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for student in students %}
+                <tr>
+                  <td><a href="{{ url_for('main.student_detail', id=student.id) }}" class="text-decoration-none fw-semibold">{{ student.student_id }}</a></td>
+                  <td>{{ student.full_name }}</td>
+                  <td>{{ student.email }}</td>
+                  <td>{{ student.department.name }}</td>
+                  <td>{{ student.course.name }}</td>
+                  <td>{{ student.enrollment_date.strftime('%Y-%m-%d') }}</td>
+                  <td class="text-center">
+                    <div class="btn-group" role="group">
+                      <a href="{{ url_for('main.student_detail', id=student.id) }}" class="btn btn-sm btn-outline-info">View</a>
+                      <a href="{{ url_for('main.edit_student', id=student.id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                      <form action="{{ url_for('main.delete_student', id=student.id) }}" method="post" class="d-inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirmDelete();">Delete</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="p-4 text-center text-muted">
+          No students match the selected search and filter criteria.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
